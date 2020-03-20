@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+
+<head>
+  <title>Glue Hecklevision!</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.7.5/video-js.min.css" />
+  <link rel="stylesheet"
+    href="https://unpkg.com/@silvermine/videojs-chromecast@1.2.0/dist/silvermine-videojs-chromecast.css" />
+  <link rel="stylesheet"
+    href="https://unpkg.com/videojs-hls-quality-selector@1.1.1/dist/videojs-hls-quality-selector.css" />
+  <link rel="stylesheet" href="https://unpkg.com/videojs-errors@4.3.2/dist/videojs-errors.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div id="container">
+    <div id="header">
+      <h1>Glue Hecklevision!</h1>
+      <p>
+        To heckle, open The Glue Factory slack, and in any channel, type <code>/heckle</code>, followed
+        by the text you want to send.
+      </p>
+    </div>
+    <div id="playerContainer">
+      <video id="video" class="video-js vjs-default-skin" controls width="1280" height="720">
+        <p class="vjs-no-js">
+          To view this video please enable JavaScript, and consider upgrading to a
+          web browser that
+          <a href="https://videojs.com/html5-video-support/" target="_blank">
+            supports HTML5 video
+          </a>.
+        </p>
+      </video>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.7.5/video.min.js"></script>
+  <script src="https://unpkg.com/videojs-errors@4.3.2/dist/videojs-errors.min.js"></script>
+  <script src="https://unpkg.com/@silvermine/videojs-chromecast@1.2.0/dist/silvermine-videojs-chromecast.min.js">
+  </script>
+  <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
+  <script src="https://unpkg.com/videojs-contrib-quality-levels@2.0.9/dist/videojs-contrib-quality-levels.min.js">
+  </script>
+  <script src="https://unpkg.com/videojs-hls-quality-selector@1.1.1/dist/videojs-hls-quality-selector.min.js">
+  </script>
+
+  <script lang="text/javascript">
+    const options = {
+      autoplay: true,
+      techOrder: ['chromecast', 'html5'],
+      chromecast: {
+        requestTitleFn: () => 'Glue Hecklevision',
+      },
+      plugins: {
+        chromecast: {},
+      },
+      html5: {
+        hls: {
+          overrideNative: !videojs.browser.IS_ANY_SAFARI,
+          smoothQualityChange: true,
+        },
+      },
+    };
+
+    const player = videojs('video', options);
+    player.hlsQualitySelector({
+      displayCurrentQuality: true,
+    });
+    player.src({
+      src: '/live/movie/index.m3u8',
+      type: 'application/vnd.apple.mpegurl',
+    });
+  </script>
+</body>

@@ -1,0 +1,37 @@
+html,
+body {
+  background-color: #222222;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+  color: #AAAAAA;
+}
+
+#container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+#header {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#header h1 {
+  font-weight: bold;
+  font-size: 24pt;
+}
+
+#header p {
+  font-size: 16pt;
+}
