@@ -21,7 +21,8 @@
     </div>
     <div id="playerContainer">
       <div id="playerWrapper">
-        <video id="video" class="video-js vjs-default-skin" controls>
+        <video id="video" class="video-js vjs-default-skin" controls autoplay preload="auto">
+          <source type="application/vnd.apple.mpegurl" src="/live/movie.m3u8" />
           <p class="vjs-no-js">
             To view this video please enable JavaScript, and consider upgrading to a
             web browser that
@@ -54,24 +55,40 @@
       },
       html5: {
         hls: {
+          enableLowInitialPlaylist: true,
+          useBandwidthFromLocalStorage: true,
           overrideNative: !videojs.browser.IS_ANY_SAFARI,
           smoothQualityChange: true,
         },
       },
-      sources: [{
-        src: '/live/movie.m3u8',
-        type: 'application/vnd.apple.mpegurl',
-      }],
+      plugins: {
+        qualityLevels: {},
+      },
     };
 
     const player = videojs('video', options);
-    player.qualityLevels();
     player.hlsQualitySelector({
       displayCurrentQuality: true,
     });
     player.chromecast({
       buttonPositionIndex: -2,
     });
-    player.play();
+
+    const playBtn = player.getChild('bigPlayButton');
+    if (playBtn) {
+      playBtn.hide();
+      player.ready(() => {
+        const playPromise = player.play();
+        if (playPromise === undefined) {
+          playBtn.show();
+        } else {
+          playPromise.then(() => {
+            playBtn.show();
+          }).catch(() => {
+            playBtn.show();
+          });
+        }
+      });
+    }
   </script>
 </body>

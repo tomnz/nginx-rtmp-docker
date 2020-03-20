@@ -91,6 +91,7 @@ RUN cd /build/nginx && \
     --without-stream_upstream_zone_module \
     --with-ipv6 \
     --with-pcre=../pcre \
+    --with-threads \
     --with-debug \
     --add-module=/build/nginx-rtmp-module && \
     make -j $(getconf _NPROCESSORS_ONLN)
