@@ -2,9 +2,11 @@
 
 <head>
   <title>Glue Hecklevision!</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.7.5/video-js.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/video.js@7.7.5/dist/video-js.css" />
   <link rel="stylesheet"
     href="https://unpkg.com/@silvermine/videojs-chromecast@1.2.0/dist/silvermine-videojs-chromecast.css" />
+  <link rel="stylesheet"
+    href="https://unpkg.com/@silvermine/videojs-airplay@1.0.0/dist/silvermine-videojs-airplay.css" />
   <link rel="stylesheet"
     href="https://unpkg.com/videojs-hls-quality-selector@1.1.1/dist/videojs-hls-quality-selector.css" />
   <link rel="stylesheet" href="style.css" />
@@ -21,74 +23,78 @@
     </div>
     <div id="playerContainer">
       <div id="playerWrapper">
-        <video id="video" class="video-js vjs-default-skin" controls autoplay preload="auto">
-          <source type="application/vnd.apple.mpegurl" src="/live/movie.m3u8" />
-          <p class="vjs-no-js">
-            To view this video please enable JavaScript, and consider upgrading to a
-            web browser that
-            <a href="https://videojs.com/html5-video-support/" target="_blank">
-              supports HTML5 video
-            </a>.
-          </p>
+        <video id="video" class="video-js vjs-default-skin">
         </video>
       </div>
     </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.7.5/video.min.js"></script>
+  <script src="https://unpkg.com/video.js@7.7.5/dist/video.min.js"></script>
   <script src="https://unpkg.com/@silvermine/videojs-chromecast@1.2.0/dist/silvermine-videojs-chromecast.min.js">
   </script>
+  <script>
+    window.SILVERMINE_VIDEOJS_CHROMECAST_CONFIG = {
+      preloadWebComponents: true,
+    };
+  </script>
   <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
+  <script src="https://unpkg.com/@silvermine/videojs-airplay@1.0.0/dist/silvermine-videojs-airplay.min.js">
+  </script>
   <script src="https://unpkg.com/videojs-contrib-quality-levels@2.0.9/dist/videojs-contrib-quality-levels.min.js">
   </script>
   <script src="https://unpkg.com/videojs-hls-quality-selector@1.1.1/dist/videojs-hls-quality-selector.min.js">
   </script>
 
   <script lang="text/javascript">
-    const options = {
-      fill: true,
-      responsive: true,
-      liveui: true,
-      techOrder: ['chromecast', 'html5'],
-      chromecast: {
-        requestTitleFn: () => 'Glue Hecklevision',
-      },
-      html5: {
-        hls: {
-          enableLowInitialPlaylist: true,
-          useBandwidthFromLocalStorage: true,
-          overrideNative: !videojs.browser.IS_ANY_SAFARI,
-          smoothQualityChange: true,
+    window.addEventListener('load', () => {
+      const options = {
+        controls: true,
+        preload: 'auto',
+        fill: true,
+        responsive: true,
+        liveui: true,
+        techOrder: ['chromecast', 'html5'],
+        chromecast: {
+          requestTitleFn: () => 'Glue Hecklevision',
         },
-      },
-      plugins: {
-        qualityLevels: {},
-      },
-    };
+        html5: {
+          hls: {
+            blacklistDuration: 10,
+            bandwidth: 1128000,
+            useBandwidthFromLocalStorage: true,
+            overrideNative: !videojs.browser.IS_ANY_SAFARI,
+            smoothQualityChange: true,
+          },
+          nativeAudioTracks: !videojs.browser.IS_ANY_SAFARI,
+          nativeVideoTracks: !videojs.browser.IS_ANY_SAFARI,
+        },
+        plugins: {
+          airPlay: {},
+          chromecast: {
+            buttonPositionIndex: -2,
+            // Glue Cast app
+            receiverAppID: 'B42E7286',
+          },
+        },
+        sources: [{
+          src: '/live/movie.m3u8',
+          type: 'application/vnd.apple.mpegurl',
+        }],
+      };
 
-    const player = videojs('video', options);
-    player.hlsQualitySelector({
-      displayCurrentQuality: true,
-    });
-    player.chromecast({
-      buttonPositionIndex: -2,
-    });
+      const player = videojs(document.querySelector('#video'), options);
+      player.qualityLevels();
+      player.hlsQualitySelector({
+        displayCurrentQuality: true,
+      });
 
-    const playBtn = player.getChild('bigPlayButton');
-    if (playBtn) {
-      playBtn.hide();
-      player.ready(() => {
-        const playPromise = player.play();
-        if (playPromise === undefined) {
-          playBtn.show();
-        } else {
-          playPromise.then(() => {
-            playBtn.show();
-          }).catch(() => {
-            playBtn.show();
-          });
+      player.ready(async () => {
+        try {
+          await player.play();
+        } finally {
+          // Ignore errors - different browsers handle this in weird ways
         }
       });
-    }
+    });
   </script>
 </body>
