@@ -48,6 +48,7 @@
   <script lang="text/javascript">
     window.addEventListener('load', () => {
       const options = {
+        autoplay: 'play',
         controls: true,
         preload: 'auto',
         fill: true,
@@ -86,14 +87,6 @@
       player.qualityLevels();
       player.hlsQualitySelector({
         displayCurrentQuality: true,
-      });
-
-      player.ready(async () => {
-        try {
-          await player.play();
-        } finally {
-          // Ignore errors - different browsers handle this in weird ways
-        }
       });
     });
   </script>
