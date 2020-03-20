@@ -1,6 +1,6 @@
 html,
 body {
-  background-color: #222222;
+  background-color: #111111;
   height: 100%;
   width: 100%;
   margin: 0;
@@ -8,30 +8,50 @@ body {
 
 body {
   font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
-  color: #AAAAAA;
+  color: #CCCCCC;
 }
 
 #container {
+  box-sizing: border-box;
   height: 100%;
-  width: 100%;
-  display: flex;
+  min-width: 100%;
+  display: inline-flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
 }
 
 #header {
-  margin-bottom: 20px;
+  flex-shrink: 1;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 0 30px;
 }
 
-#header h1 {
+#header>h1 {
   font-weight: bold;
-  font-size: 24pt;
+  font-size: 18pt;
+  line-height: 1.2em;
 }
 
-#header p {
-  font-size: 16pt;
+#header>p {
+  font-size: 12pt;
+  line-height: 1.2em;
+}
+
+#playerContainer {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: 20px 30px 30px 30px;
+  flex-grow: 1;
+}
+
+#playerWrapper {
+  box-sizing: border-box;
+  border: 2px solid #333333;
+  width: 100%;
+  height: 100%;
 }

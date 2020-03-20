@@ -199,7 +199,8 @@ COPY --from=build-nginx /build/nginx/objs/nginx /usr/local/sbin/nginx
 RUN chmod 550 /usr/local/sbin/nginx
 
 COPY --from=build-ffmpeg /usr/local /usr/local
-COPY --from=build-ffmpeg /usr/lib/libfdk-aac.so.2 /usr/lib/libfdk-aac.so.2
+COPY --from=build-ffmpeg /lib /lib
+COPY --from=build-ffmpeg /usr/lib /usr/lib
 
 # Set up config file
 ADD nginx /etc/nginx

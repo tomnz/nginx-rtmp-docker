@@ -7,7 +7,6 @@
     href="https://unpkg.com/@silvermine/videojs-chromecast@1.2.0/dist/silvermine-videojs-chromecast.css" />
   <link rel="stylesheet"
     href="https://unpkg.com/videojs-hls-quality-selector@1.1.1/dist/videojs-hls-quality-selector.css" />
-  <link rel="stylesheet" href="https://unpkg.com/videojs-errors@4.3.2/dist/videojs-errors.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
 
@@ -21,20 +20,21 @@
       </p>
     </div>
     <div id="playerContainer">
-      <video id="video" class="video-js vjs-default-skin" controls width="1280" height="720">
-        <p class="vjs-no-js">
-          To view this video please enable JavaScript, and consider upgrading to a
-          web browser that
-          <a href="https://videojs.com/html5-video-support/" target="_blank">
-            supports HTML5 video
-          </a>.
-        </p>
-      </video>
+      <div id="playerWrapper">
+        <video id="video" class="video-js vjs-default-skin" controls>
+          <p class="vjs-no-js">
+            To view this video please enable JavaScript, and consider upgrading to a
+            web browser that
+            <a href="https://videojs.com/html5-video-support/" target="_blank">
+              supports HTML5 video
+            </a>.
+          </p>
+        </video>
+      </div>
     </div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.7.5/video.min.js"></script>
-  <script src="https://unpkg.com/videojs-errors@4.3.2/dist/videojs-errors.min.js"></script>
   <script src="https://unpkg.com/@silvermine/videojs-chromecast@1.2.0/dist/silvermine-videojs-chromecast.min.js">
   </script>
   <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
@@ -45,13 +45,12 @@
 
   <script lang="text/javascript">
     const options = {
-      autoplay: true,
+      fill: true,
+      responsive: true,
+      liveui: true,
       techOrder: ['chromecast', 'html5'],
       chromecast: {
         requestTitleFn: () => 'Glue Hecklevision',
-      },
-      plugins: {
-        chromecast: {},
       },
       html5: {
         hls: {
@@ -59,15 +58,20 @@
           smoothQualityChange: true,
         },
       },
+      sources: [{
+        src: '/live/movie.m3u8',
+        type: 'application/vnd.apple.mpegurl',
+      }],
     };
 
     const player = videojs('video', options);
+    player.qualityLevels();
     player.hlsQualitySelector({
       displayCurrentQuality: true,
     });
-    player.src({
-      src: '/live/movie/index.m3u8',
-      type: 'application/vnd.apple.mpegurl',
+    player.chromecast({
+      buttonPositionIndex: -2,
     });
+    player.play();
   </script>
 </body>
