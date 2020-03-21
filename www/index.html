@@ -33,11 +33,6 @@
   <script src="https://unpkg.com/video.js@7.7.5/dist/video.min.js"></script>
   <script src="https://unpkg.com/@silvermine/videojs-chromecast@1.2.0/dist/silvermine-videojs-chromecast.min.js">
   </script>
-  <script>
-    window.SILVERMINE_VIDEOJS_CHROMECAST_CONFIG = {
-      preloadWebComponents: true,
-    };
-  </script>
   <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
   <script src="https://unpkg.com/@silvermine/videojs-airplay@1.0.0/dist/silvermine-videojs-airplay.min.js">
   </script>
@@ -70,24 +65,24 @@
           nativeAudioTracks: !videojs.browser.IS_ANY_SAFARI,
           nativeVideoTracks: !videojs.browser.IS_ANY_SAFARI,
         },
-        plugins: {
-          airPlay: {},
-          chromecast: {
-            buttonPositionIndex: -2,
-            // Glue Cast app
-            receiverAppID: 'B42E7286',
-          },
-        },
+        plugins: {},
         sources: [{
           src: '/live/movie.m3u8',
           type: 'application/vnd.apple.mpegurl',
         }],
       };
 
-      const player = videojs(document.querySelector('#video'), options);
-      player.qualityLevels();
-      player.hlsQualitySelector({
-        displayCurrentQuality: true,
+      const player = videojs(document.querySelector('#video'), options, function () {
+        this.qualityLevels();
+        this.hlsQualitySelector({
+          displayCurrentQuality: true,
+        });
+        this.airPlay();
+        this.chromecast({
+          buttonPositionIndex: -2,
+          // Glue Cast app
+          receiverAppID: 'B42E7286',
+        });
       });
     });
   </script>
