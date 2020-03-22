@@ -171,8 +171,7 @@ RUN addgroup -S nginx && \
     adduser -s /sbin/nologin -G nginx -S -D -H nginx
 
 # Set up directories
-ADD www /var/www
-RUN mkdir -p /etc/nginx /var/log/nginx && \
+RUN mkdir -p /etc/nginx /var/log/nginx /var/www && \
     chown -R nginx:nginx /var/log/nginx /var/www && \
     chmod -R 775 /var/log/nginx /var/www
 
