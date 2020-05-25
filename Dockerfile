@@ -179,9 +179,9 @@ RUN mkdir -p /etc/nginx /var/log/nginx /var/www && \
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stderr /var/log/nginx/error.log
 
-ADD static /static
-RUN chown -R nginx:nginx /static && \
-    chmod -R 775 /static
+ADD stat /stat
+RUN chown -R nginx:nginx /stat && \
+    chmod -R 775 /stat
 
 # Set up exposed ports
 EXPOSE 1935/tcp
