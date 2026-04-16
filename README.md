@@ -77,7 +77,8 @@ Built on Alpine 3.20 using the packaged `nginx`, `nginx-mod-rtmp` (arut's module
 
 - Logs go to docker via `/var/log/nginx/{access,error}.log` → `/dev/stdout`/`stderr`.
 - HLS segments live under `/appdata/nginx/hls` — mount a tmpfs there for best performance:
-  `-mount type=tmpfs,destination=/appdata`.
+  `--mount type=tmpfs,destination=/appdata`.
+- Passthrough variant is tuned for low latency: `hls_fragment 1s`, `hls_playlist_length 4s`, `hls_sync 100ms`, `hls_continuous on`. Pair with OBS keyframe interval of 1s for aligned segment boundaries.
 - `/stat` and `/static/stat.xsl` render the RTMP stat page.
 
 ## History
