@@ -31,9 +31,21 @@ docker run -d \
 
 In OBS: **Settings → Stream → Service: Custom → Server: `rtmp://<host>:1935/live` → Stream Key: anything**.
 
-Play the stream with HLS at `http://<host>:8027/live/<stream_key>_src.m3u8` (note the `_src` suffix; that's the HLS variant name from `nginx.conf`).
+### Passthrough variant (`:latest`)
 
-For raw RTMP playback (VLC etc.), the URL is `rtmp://<host>:1935/hls/<stream_key>_src`.
+HLS is generated directly in the `live` application, so:
+
+- HLS playlist: `http://<host>:8027/live/<stream_key>.m3u8`
+- HLS segments: `http://<host>:8027/live/<stream_key>-N.ts`
+- Raw RTMP: `rtmp://<host>:1935/live/<stream_key>`
+
+### Transcode variant (`:transcode`)
+
+An ffmpeg inside the container re-encodes the incoming stream into multiple HLS bitrates and pushes each to a second RTMP application, which writes HLS with a master playlist:
+
+- Master HLS playlist: `http://<host>:8027/live/<stream_key>.m3u8` (references the variants)
+- Variant playlist: `http://<host>:8027/live/<stream_key>_src.m3u8`, `..._720p.m3u8`, etc.
+- Raw RTMP passthrough: `rtmp://<host>:1935/hls/<stream_key>_src`
 
 ## Build locally
 
