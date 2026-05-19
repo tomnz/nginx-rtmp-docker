@@ -27,7 +27,7 @@ if [ "${TRANSCODE}" = "true" ]; then
     : "${HLS_PLAYLIST_LENGTH:=20s}"
 else
     : "${HLS_FRAGMENT:=1s}"
-    : "${HLS_PLAYLIST_LENGTH:=8s}"
+    : "${HLS_PLAYLIST_LENGTH:=12s}"
 fi
 export HLS_FRAGMENT HLS_PLAYLIST_LENGTH
 
