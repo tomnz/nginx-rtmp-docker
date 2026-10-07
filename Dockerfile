@@ -17,13 +17,13 @@
 #
 # For the full multi-tag publish pipeline see scripts/publish.sh.
 
-ARG ALPINE_VERSION=3.20
+ARG ALPINE_VERSION=3.24
 
 FROM alpine:${ALPINE_VERSION}
 
 ARG TRANSCODE=false
 
-# Packaged nginx 1.26.x + arut's rtmp module + ffmpeg 6.x + tini as PID 1.
+# Packaged nginx 1.30.x + arut's rtmp module + ffmpeg 8.x + tini as PID 1.
 # gettext provides envsubst, used by the entrypoint to render nginx.conf
 # from its template with runtime env vars.
 RUN apk add --no-cache \

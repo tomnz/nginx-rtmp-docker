@@ -99,7 +99,7 @@ PLATFORMS=linux/amd64,linux/arm64 ./scripts/publish.sh   # multi-arch
 
 ## How it works
 
-Built on Alpine 3.20 using the packaged `nginx`, `nginx-mod-rtmp` (arut's module), and `ffmpeg`. Much smaller + faster to rebuild than the previous from-source stack, and picks up Alpine security updates on every rebuild.
+Built on Alpine 3.24 using the packaged `nginx`, `nginx-mod-rtmp` (arut's module), and `ffmpeg`. Much smaller + faster to rebuild than the previous from-source stack, and picks up Alpine security updates on every rebuild.
 
 - Logs go to docker via `/var/log/nginx/{access,error}.log` → `/dev/stdout`/`stderr`.
 - HLS segments live under `/appdata/nginx/hls` — mount a tmpfs there for best performance:
