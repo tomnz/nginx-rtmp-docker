@@ -35,8 +35,8 @@ All settings have sensible defaults — you only need to set them if you want to
 |---|---|---|---|
 | `HTTP_PORT` | `8080` | `8080` | HTTP listen port for HLS + stat |
 | `RTMP_PORT` | `1935` | `1935` | RTMP ingest listen port |
-| `HLS_FRAGMENT` | `1s` | `500ms` | HLS segment duration (`hls_fragment`). Match to OBS keyframe interval |
-| `HLS_PLAYLIST_LENGTH` | `4s` | `20s` | Sliding window of the live playlist (`hls_playlist_length`) |
+| `HLS_FRAGMENT` | `1s` | `500ms` | Minimum HLS segment duration (`hls_fragment`). A segment closes on the first keyframe at or past it, so keep it at or just below the encoder's keyframe interval; OBS rounds that down to whole frames (1s at 23.976 fps is 0.959s) |
+| `HLS_PLAYLIST_LENGTH` | `12s` | `20s` | Sliding window of the live playlist (`hls_playlist_length`) |
 | `HLS_SYNC` | `100ms` | `100ms` | Sub-keyframe alignment threshold (`hls_sync`) |
 
 Example — lower latency at the cost of a smaller rewind window:
@@ -105,7 +105,7 @@ Built on Alpine 3.24 using the packaged `nginx`, `nginx-mod-rtmp` (arut's module
 - HLS segments live under `/appdata/nginx/hls` — mount a tmpfs there for best performance:
   `--mount type=tmpfs,destination=/appdata`.
 - The entrypoint renders the nginx config template via `envsubst` at every start, then runs `nginx -t` implicitly through tini → nginx. Build-time `nginx -t` validates the template with default values.
-- Passthrough variant default tuning targets low latency: `hls_fragment 1s`, `hls_playlist_length 4s`, `hls_sync 100ms`, `hls_continuous on`. Pair with OBS keyframe interval of 1s for aligned segment boundaries.
+- Passthrough variant default tuning targets low latency: `hls_fragment 1s`, `hls_playlist_length 12s`, `hls_sync 100ms`, `hls_continuous on`. Segments close on the first keyframe at or past `hls_fragment`, so the OBS keyframe interval sets their real length: 2s gives ~2s segments. A 1s interval at 23.976 fps rounds down to 23 frames (0.959s), which misses the 1s mark and also yields ~2s segments.
 - `/stat` and `/static/stat.xsl` render the RTMP stat page.
 
 ## History

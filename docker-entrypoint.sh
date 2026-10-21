@@ -6,7 +6,7 @@
 #   HTTP_PORT              HTTP listen port (default 8080)
 #   RTMP_PORT              RTMP listen port (default 1935)
 #   HLS_FRAGMENT           hls_fragment directive (default: 1s passthrough / 500ms transcode)
-#   HLS_PLAYLIST_LENGTH    hls_playlist_length (default: 4s passthrough / 20s transcode)
+#   HLS_PLAYLIST_LENGTH    hls_playlist_length (default: 12s passthrough / 20s transcode)
 #   HLS_SYNC               hls_sync (default 100ms)
 #
 # Only the names listed in $VARS below are substituted; every other `$foo`
